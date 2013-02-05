@@ -75,7 +75,7 @@ do
         CONTAINER_FORMAT=$(echo $image | awk '{print $8}')
         STATUS=$(echo $image | awk '{print $12}')
 	OWNER=$(glance image-show $ID | grep owner | awk '{print $14}')
-	glance image-create --name=$NAME --disk_format=$DISK_FORMAT --container_format=$CONTAINER_FORMAT \
+	glance image-create --id=$ID --name=$NAME --disk_format=$DISK_FORMAT --container_format=$CONTAINER_FORMAT \
 		--owner=$OWNER --is-public=True < $NAME.$DISK_FORMAT
 done < images.list
 
