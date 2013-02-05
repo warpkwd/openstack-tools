@@ -51,6 +51,7 @@ do
 	echo "$image $OWNER">>images-with-owner.list 
 	echo "Downloading : $NAME.$DISK_FORMAT ..."
       	glance image-download $ID >$NAME.$DISK_FORMAT
+	glance image-delete $ID
 done < images.list
 mv images-with-owner.list images.list
 
