@@ -1,0 +1,33 @@
+# Reclone each time
+RECLONE=yes
+
+# Credentials
+ADMIN_PASSWORD=password
+MYSQL_PASSWORD=password
+RABBIT_PASSWORD=password
+SERVICE_PASSWORD=password
+SERVICE_TOKEN=tokentoken
+
+# Quantum
+disable_service n-net
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service quantum
+enable_service q-lbaas
+Q_SERVICE_PLUGINS=quantum.plugins.services.agent_loadbalancer.plugin.LoadBalancerPlugin
+
+# Tempest
+enable_service tempest
+
+# Swift
+ENABLED_SERVICES+=,swift
+SWIFT_HASH=66a3d6b56c1f479c8b4e70ab5c2000f5
+SWIFT_REPLICAS=1
+SWIFT_DATA_DIR=$DEST/data
+
+# Ceilometer
+EXTRA_OPTS=(notification_driver=nova.openstack.common.notifier.rabbit_notifier,ceilometer.compute.nova_notifier)
+enable_service ceilometer-acompute,ceilometer-acentral,ceilometer-collector,ceilometer-api
