@@ -48,7 +48,7 @@ do
       	CONTAINER_FORMAT=$(echo $image | awk '{print $8}')
       	STATUS=$(echo $image | awk '{print $12}')
       	OWNER=$(glance image-show $ID | grep owner | awk '{print $4}')
-	echo "$image $OWNER">>images-with-owner.list 
+	echo "$image $OWNER">>images-with-owner.list
 	echo "Downloading : $NAME.$DISK_FORMAT ..."
       	glance image-download $ID >$NAME.$DISK_FORMAT
 	glance image-delete $ID
