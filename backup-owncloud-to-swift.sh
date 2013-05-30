@@ -1,11 +1,13 @@
 #!/bin/bash
 
+# Require GPG & python-swiftclient
+
 export GPG_PUB_KEY="XXXX"
 export OS_USERNAME="xxxx"
 export OS_TENANT_NAME="XXXX"
 export OS_AUTH_URL="https://identity.fr0.cloudwatt.com:443/v2.0"
 export OS_PASSWORD="XXXX"
-export OWNCLOUD_BASE="/home/owncloud"
+export OWNCLOUD_BASE="/home/owncloud/data/<user/files"
 export TMP_DIR=/tmp
 
 usage () {
