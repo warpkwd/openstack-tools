@@ -31,3 +31,6 @@ SWIFT_DATA_DIR=$DEST/data
 # Ceilometer
 EXTRA_OPTS=(notification_driver=nova.openstack.common.notifier.rabbit_notifier,ceilometer.compute.nova_notifier)
 enable_service ceilometer-acompute,ceilometer-acentral,ceilometer-collector,ceilometer-api
+
+# Heat
+ENABLED_SERVICES+=,heat,h-api,h-api-cfn,h-api-cw,h-eng
