@@ -25,7 +25,7 @@
 export OS_TENANT_NAME=admin
 export OS_USERNAME=admin
 export OS_PASSWORD=password
-export OS_AUTH_URL="http://keystone:5000/v2.0/"
+export OS_AUTH_URL="http://<keystone-fqdn>:5000/v2.0/"
 
 start=`date +%s`
 
