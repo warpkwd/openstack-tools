@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Require GPG & python-swiftclient
 
 export GPG_PUB_KEY="XXXX"
