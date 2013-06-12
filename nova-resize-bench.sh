@@ -29,6 +29,34 @@ export OS_AUTH_URL="http://<keystone-fqdn>:5000/v2.0/"
 
 start=`date +%s`
 
+# Funtions
+create_volume () {
+nova volume-create --display-name test 1
+if ! timeout 30 sh -c "while ! cinder list | grep test | grep -q available; do sleep 1; done"; then
+    echo "Failed to create a volume!"
+    exit 1
+fi
+}
+
+attach_volume () {
+VOLUME_ID=$(cinder list | grep test | awk '{print $2}')
+nova volume-attach scaling-test $VOLUME_ID /dev/vdb
+if ! timeout 30 sh -c "while ! cinder list | grep test | grep -q "in-use"; do sleep 1; done"; then
+    echo "Failed to attach the volume!"
+    exit 1
+fi
+}
+
+detach_volume () {
+VOLUME_ID=$(cinder list | grep test | awk '{print $2}')
+nova volume-detach scaling-test $VOLUME_ID
+if ! timeout 30 sh -c "while ! cinder list | grep test | grep -q "available"; do sleep 1; done"; then
+    echo "Failed to attach the volume!"
+    exit 1
+fi
+}
+
+
 # Spawn a small VM
 echo " "
 echo "We start a Small VM"
@@ -44,6 +72,10 @@ ping $IP>ping 2>/dev/null& pid=$!
 start1=`date +%s`
 echo " "
 echo "Resizing from Small to Large"
+
+# Workaround for https://bugs.launchpad.net/nova/+bug/1190364
+detach_volume
+
 nova resize scaling-test 4
 if ! timeout 30 sh -c "while ! nova show scaling-test | grep status | grep -q RESIZE; do sleep 1; done"; then
     echo "Resize failed."
@@ -62,6 +94,9 @@ if ! timeout 30 sh -c "while ! nova show scaling-test | grep status | grep -q AC
     echo "Resize failed."
     echo 1
 fi
+
+attach_volume
+
 end1=`date +%s`
 runtime1=$((end1-start1))
 
@@ -78,6 +113,9 @@ start2=`date +%s`
 ping $IP>ping 2>/dev/null& pid=$!
 echo " "
 echo "Resizing from Large to Tiny"
+
+detach_volume
+
 nova resize scaling-test 1
 if ! timeout 30 sh -c "while ! nova show scaling-test | grep status | grep -q RESIZE; do sleep 1; done"; then
     echo "Resize failed."
@@ -96,6 +134,9 @@ if ! timeout 30 sh -c "while ! nova show scaling-test | grep status | grep -q AC
     echo "Resize failed."
     echo 1
 fi
+
+attach_volume
+
 end2=`date +%s`
 runtime2=$((end2-start2))
 
