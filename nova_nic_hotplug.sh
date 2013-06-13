@@ -45,7 +45,7 @@ create_Network () {
 create_VM () {
 	nova boot --poll --key_name $KEY_NAME --image $IMAGE_NAME --flavor $FLAVOR_ID $VM_NAME
 	PUBLIC_IP=$(nova list | grep "$VM_NAME" | awk '{print $8}' | cut -d "=" -f 2)
-	if ! timeout 60 sh -c "while ! ping -c1 $PUBLIC_IP &>/dev/null; do :; done"; then
+	if ! timeout 60 sh -c "while ! ping -c1 $PUBLIC_IP  >/dev/null 2>&1; do :; done"; then
     		echo "Failed to ping the VM!"
     		exit 1
   	fi
@@ -67,8 +67,8 @@ purge () {
 }
 
 # Let's go !
-create_Network $NETWORK_NAME $SUBNET_NAME $SUBNET_CIDR
 create_VM
+create_Network $NETWORK_NAME $SUBNET_NAME $SUBNET_CIDR
 add_NIC
 show_Hotplug
 purge
