@@ -63,7 +63,7 @@ show_Hotplug () {
 
 purge () {
 	nova delete $VM_NAME
-	quantum net-delete $NET_NAME
+	quantum net-delete $NETWORK_NAME
 }
 
 # Let's go !
