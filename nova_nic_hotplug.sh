@@ -54,6 +54,7 @@ create_VM () {
 add_NIC () {
 	NET_ID=$(quantum net-show -F id $NETWORK_NAME | grep id | awk '{print $4}')
 	nova interface-attach --net-id $NET_ID $VM_NAME
+  sleep 10
 }
 
 show_Hotplug () {
@@ -62,7 +63,6 @@ show_Hotplug () {
 
 purge () {
 	nova delete $VM_NAME
-	quantum subnet-delete $SUBNET_NAME
 	quantum net-delete $NET_NAME
 }
 
