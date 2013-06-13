@@ -59,6 +59,7 @@ add_NIC () {
 
 show_Hotplug () {
   ssh cirros@$PUBLIC_IP "ip a"
+  nova interface-list $VM_NAME
 }
 
 purge () {
