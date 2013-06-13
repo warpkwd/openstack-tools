@@ -24,18 +24,17 @@
 export OS_TENANT_NAME=admin
 export OS_USERNAME=admin
 export OS_PASSWORD=password
-export OS_AUTH_URL="http://<keystone-fqdn>:5000/v2.0/"
+export OS_AUTH_URL="http://keystone:5000/v2.0/"
 
 # Variables
 VM_NAME="vm-test"
 IMAGE_NAME="Cirros"
 FLAVOR_ID="2"
-NETWORK1_NAME="net-test1"
-SUBNET1_NAME="sub-test1"
-SUBNET1_CIDR="10.0.1.0/24"
-NETWORK2_NAME="net-test2"
-SUBNET2_NAME="sub-test2"
-SUBNET2_CIDR="10.0.2.0/24"
+KEY_NAME="emilien"
+NETWORK_NAME="net-test"
+SUBNET_NAME="sub-test"
+SUBNET_CIDR="10.0.11.0/24"
+PUBLIC_NETWORK="public_network_#1"
 
 # Functions
 create_Network () {
@@ -44,39 +43,32 @@ create_Network () {
 }
 
 create_VM () {
-	NET_ID=$(quantum net-show -F id $1 | grep id | awk '{print $4}')
-	nova boot --poll --key_name test --image $IMAGE_NAME --flavor $FLAVOR_ID --nic net-id=$NET_ID $2
+	nova boot --poll --key_name $KEY_NAME --image $IMAGE_NAME --flavor $FLAVOR_ID $VM_NAME
+	PUBLIC_IP=$(nova list | grep "$VM_NAME" | awk '{print $8}' | cut -d "=" -f 2)
+	if ! timeout 60 sh -c "while ! ping -c1 $PUBLIC_IP &>/dev/null; do :; done"; then
+    		echo "Failed to ping the VM!"
+    		exit 1
+  	fi
 }
 
 add_NIC () {
-	NET_ID=$(quantum net-show -F id $1 | grep id | awk '{print $4}')
-	nova interface-attach --net-id $NET_ID $2
+	NET_ID=$(quantum net-show -F id $NETWORK_NAME | grep id | awk '{print $4}')
+	nova interface-attach --net-id $NET_ID $VM_NAME
 }
 
-test_Hotplug () {
-	ping $1 -c5 -q
-	if [ $? != 1 ]
-	then
-		echo "New interface is reachable!"
-	else
-		echo "Can't reach the new interface!"
-		exit 1
-	fi
+show_Hotplug () {
+  ssh cirros@$PUBLIC_IP "ip a"
 }
 
 purge () {
 	nova delete $VM_NAME
-	quantum subnet-delete $SUBNET1_NAME
-	quantum subnet-delete $SUBNET2_NAME
-	quantum net-delete $NET1_NAME
-	quantum net-delete $NET2_NAME
+	quantum subnet-delete $SUBNET_NAME
+	quantum net-delete $NET_NAME
 }
 
 # Let's go !
-create_Network $NETWORK1_NAME $SUBNET1_NAME $SUBNET1_CIDR
-create_Network $NETWORK2_NAME $SUBNET2_NAME $SUBNET2_CIDR
-create_VM $NETWORK1_NAME $VM_NAME
-add_NIC $NETWORK2_NAME $VM_NAME
-# Todo(EmilienM) :
-# test_Hotplug
+create_Network $NETWORK_NAME $SUBNET_NAME $SUBNET_CIDR
+create_VM
+add_NIC
+show_Hotplug
 purge
