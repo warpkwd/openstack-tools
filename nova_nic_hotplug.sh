@@ -54,18 +54,18 @@ create_VM () {
 add_NIC () {
 	NET_ID=$(quantum net-show -F id $NETWORK_NAME | grep id | awk '{print $4}')
 	nova interface-attach --net-id $NET_ID $VM_NAME
-  ssh cirros@$PUBLIC_IP "sudo -i udhcpc -i eth1"
-  sleep 10
+  	ssh cirros@$PUBLIC_IP "sudo -i udhcpc -i eth1"
+  	sleep 10
 }
 
 show_Hotplug () {
-  ssh cirros@$PUBLIC_IP "ip a"
-  nova interface-list $VM_NAME
+ 	 ssh cirros@$PUBLIC_IP "ip a"
+ 	 nova interface-list $VM_NAME
 }
 
 purge () {
 	nova delete $VM_NAME
-  sleep 5
+  	sleep 5
 	quantum net-delete $NETWORK_NAME
 }
 
