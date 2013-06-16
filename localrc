@@ -31,7 +31,3 @@ SWIFT_DATA_DIR=$DEST/data
 # Ceilometer
 EXTRA_OPTS=(notification_driver=nova.openstack.common.notifier.rabbit_notifier,ceilometer.compute.nova_notifier)
 enable_service ceilometer-acompute,ceilometer-acentral,ceilometer-collector,ceilometer-api
-
-# Heat
-ENABLED_SERVICES+=,heat,h-api,h-api-cfn,h-api-cw,h-eng
-IMAGE_URLS+=",http://fedorapeople.org/groups/heat/prebuilt-jeos-images/F17-x86_64-cfntools.qcow2,http://fedorapeople.org/groups/heat/prebuilt-jeos-images/F17-i386-cfntools.qcow2"
