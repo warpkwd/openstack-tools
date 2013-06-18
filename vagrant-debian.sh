@@ -14,7 +14,7 @@ while getopts "cd" opt ; do
 done
 
 
-if [[ $ACTION = "c" ]]; then
+if [[ $ACTION = c ]]; then
     cd $VAGRANT_DIR; vagrant up; vagrant ssh;
 fi
 
