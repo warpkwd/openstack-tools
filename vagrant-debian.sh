@@ -8,6 +8,7 @@ while getopts "cd" opt ; do
     case $opt in
         c ) ACTION=c ;;
         d ) ACTION=d ;;
+        s ) ACTION=s ;;
         * ) echo "Bad parameter"
             exit 1 ;;
     esac
@@ -20,4 +21,8 @@ fi
 
 if [[ $ACTION = d ]]; then
     cd $VAGRANT_DIR; vagrant destroy -f;
-fi
+if
+
+if [[ $ACTION = s ]]; then
+    cd $VAGRANT_DIR; vagrant ssh;
+fi                                      
