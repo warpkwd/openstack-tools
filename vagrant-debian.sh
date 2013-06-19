@@ -25,4 +25,4 @@ if
 
 if [[ $ACTION = s ]]; then
     cd $VAGRANT_DIR; vagrant ssh;
-fi                                      
+fi
