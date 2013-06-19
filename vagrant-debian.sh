@@ -4,7 +4,7 @@
 
 VAGRANT_DIR='/home/emilien/.vagrant.d/vm_debian'
 
-while getopts "cd" opt ; do
+while getopts "cds" opt ; do
     case $opt in
         c ) ACTION=c ;;
         d ) ACTION=d ;;
