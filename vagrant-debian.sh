@@ -21,7 +21,7 @@ fi
 
 if [[ $ACTION = d ]]; then
     cd $VAGRANT_DIR; vagrant destroy -f;
-if
+fi
 
 if [[ $ACTION = s ]]; then
     cd $VAGRANT_DIR; vagrant ssh;
