@@ -57,6 +57,10 @@ fi
 }
 
 
+# Spawn a small volume
+echo " "
+echo "We create a Small volume"
+create_volume
 # Spawn a small VM
 echo " "
 echo "We start a Small VM"
@@ -65,6 +69,7 @@ if ! timeout 30 sh -c "while ! nova show scaling-test | grep status | grep -q AC
     echo "server didn't become active!"
     exit 1
 fi
+attach_volume
 IP=$(nova show scaling-test | grep network | awk '{print $5}')
 ping $IP>ping 2>/dev/null& pid=$!
 
