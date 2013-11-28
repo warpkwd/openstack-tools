@@ -19,8 +19,6 @@ enable_service quantum
 enable_service q-lbaas
 Q_SERVICE_PLUGINS=quantum.plugins.services.agent_loadbalancer.plugin.LoadBalancerPlugin
 
-# Tempest
-enable_service tempest
 
 # Swift
 ENABLED_SERVICES+=,swift
