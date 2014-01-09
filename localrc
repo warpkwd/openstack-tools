@@ -17,7 +17,9 @@ enable_service q-l3
 enable_service q-meta
 enable_service quantum
 enable_service q-lbaas
-Q_SERVICE_PLUGINS=quantum.plugins.services.agent_loadbalancer.plugin.LoadBalancerPlugin
+enable_service q-metering
+enable_service q-vpn
+enable_service q-fwaas
 
 
 # Swift
@@ -28,4 +30,4 @@ SWIFT_DATA_DIR=$DEST/data
 
 # Ceilometer
 EXTRA_OPTS=(notification_driver=nova.openstack.common.notifier.rabbit_notifier,ceilometer.compute.nova_notifier)
-enable_service ceilometer-acompute,ceilometer-acentral,ceilometer-collector,ceilometer-api
+enable_service ceilometer-acompute,ceilometer-acentral,ceilometer-collector,ceilometer-api,ceilometer-alarm-notifier,ceilometer-alarm-evaluator
